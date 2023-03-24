@@ -76,6 +76,7 @@ class LibsscDevice:
         self.DeviceName = self.ReadVector(vKey).decode('ascii')
         self.MarkVectorUnused(vKey)
         self.OnOpen.Invoke(None)
+        self.WriteCommand(0x04, 0, 0, 0)
         self.DeviceConnected = True
     def DeviceBegin(self) ->None:
         self.RegisterCommand(0x04, self._onLog)

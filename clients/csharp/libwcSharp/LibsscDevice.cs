@@ -92,6 +92,7 @@ namespace libsscSharp
             DeviceName = name;
             MarkVectorUnused(Helper.GetUShort(a, b));
             OnOpen?.Invoke();
+            WriteCommand(0x04, 0, 0, 0);
         }
 
         public void DeviceBegin()

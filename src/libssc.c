@@ -270,6 +270,7 @@ void _BUILTIN_RESET(SDevice *device, uint8_t a, uint8_t b, uint8_t c)
 {
     SDeviceClearAllBuffers(device);
     device->bufferCtr = 0;
+    SDeviceLog(device, LOG_INFO, "Device connected; memory cleared.");
 }
 
 void SDeviceBegin(SDevice *device, uint32_t baudRate)
