@@ -1,4 +1,6 @@
 #include "libssc.h"
+
+int PANIC_MODE = 0;
 uint16_t BYTE_COMBINE(uint8_t a, uint8_t b)
 {
     return a << 8 | b;
@@ -251,6 +253,11 @@ void _BUILTIN_DEVICE_INFO(SDevice *device, uint8_t a, uint8_t b, uint8_t c)
     SWriteCommand(device, 0x01, device->deviceId,LIBRARY_VERSION, device->deviceVersion);
 }
 
+void _BUILTIN_PANIC_CLEAR(SDevice *device, uint8_t a, uint8_t b, uint8_t c)
+{
+    PANIC_MODE = 0;
+}
+
 void _BUILTIN_DEVICE_NAME(SDevice *device, uint8_t a, uint8_t b, uint8_t c)
 {
     uint16_t bufAddr = SDeviceWriteBuffer(device, device->deviceName, device->deviceNameSize);
@@ -305,8 +312,8 @@ void SDeviceLoop(SDevice *device){
             bin.ptr = ival;
             bin.size = memSize;
             SMapAppend(device->managedBuffers, &memAddr, &bin);
-        }
-        if (readChain[5] == 0xFF){
+        }else if (readChain[5] == 0xFF){
+            if (PANIC_MODE && readChain[0] != 0x07) return;
             // Valid read.
             _S_H_HANDLE funcf = (_S_H_HANDLE)SIndexVector(device->handlers, readChain[0]);
             funcf(device, readChain[1], readChain[2], readChain[3]);
@@ -371,6 +378,23 @@ void SDeviceLog(SDevice *device, uint8_t logLevel, char *msg) {
     uint8_t* spt = SPLIT_BYTES(bffr);
     SWriteCommand(device, 0x04,logLevel, spt[0], spt[1]);
 }
+
+
+void SDevicePanicException(SDevice *device, char *msg, unsigned char stopCode){
+    uint16_t bffr = SDeviceWriteBuffer(device, msg, _STR_SIZE(msg));
+    uint8_t *spt = SPLIT_BYTES(bffr);
+    SWriteCommand(device, 0x07, stopCode, spt[0], spt[1]);
+    PANIC_MODE = 1;
+    while (PANIC_MODE){
+        SDeviceLoop(device);
+    }
+}
+
+SManagedBinary *SDeviceBufferParam(SDevice *device, uint8_t a, uint8_t b)
+{
+    return SDeviceReadBuffer(device, BYTE_COMBINE(a,b));
+}
+
 int main()
 {
 

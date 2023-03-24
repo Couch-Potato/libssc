@@ -13,13 +13,13 @@ void helloWorld(SDevice *device, uint8_t a, uint8_t b, uint8_t c){
 int main()
 {
     SDevice* device = SCreateDevice("Cool Device", 123, 2);
-    // SCommunicationAdapter* adapter = SCreateAdapter(
-    //     &serial_begin,
-    //     &serial_ready,
-    //     &readByte,
-    //     &putByte
-    // );
-    SDeviceAttachAdapter(device, GetDeviceSerialAdapter());
+    SCommunicationAdapter* adapter = SCreateAdapter(
+        &serial_begin,
+        &serial_ready,
+        &readByte,
+        &putByte
+    );
+    SDeviceAttachAdapter(device, adapter);
     SDeviceRegisterHandler(device, &helloWorld);
     SDeviceBegin(device, 9600);
     while (1){

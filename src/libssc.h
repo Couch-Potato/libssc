@@ -124,9 +124,6 @@ struct SDevice
 typedef struct SDevice SDevice;
 typedef void (*_S_H_HANDLE)(SDevice* device, uint8_t, uint8_t, uint8_t);
 
-
-
-
 SDevice* SCreateDevice(char* deviceName, uint8_t deviceId, uint8_t deviceVersion);
 void SDeviceAttachAdapter(SDevice* device, SCommunicationAdapter* adapter);
 void SDeviceBegin(SDevice* device, uint32_t Rate);
@@ -140,4 +137,5 @@ void SDeviceClearAllBuffers(SDevice* device);
 uint16_t SDeviceWriteBuffer(SDevice* device, char* buffer, size_t length);
 void SDeviceDispose(SDevice* device);
 void SDeviceLog(SDevice* device, uint8_t logLevel, char* msg);
-
+SManagedBinary* SDeviceBufferParam(SDevice* device, uint8_t a, uint8_t b);
+void SDevicePanicException(SDevice* device, char* msg, unsigned char stopCode);

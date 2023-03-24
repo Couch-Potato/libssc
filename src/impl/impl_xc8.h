@@ -55,3 +55,10 @@ SCommunicationAdapter *GetDeviceSerialAdapter()
         &__WRITE
     );
 }
+
+void soft_reset(void)
+{
+    _asm 
+    reset
+    _endasm
+}
