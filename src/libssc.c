@@ -285,7 +285,7 @@ void SDeviceBegin(SDevice *device, uint32_t baudRate)
     SDeviceRegisterHandler(device, &_BUILTIN_RESET); // 0x04
     SDeviceRegisterHandler(device, &__COMMAND_EMPTY); // 0x05
     SDeviceRegisterHandler(device, &__COMMAND_EMPTY); // 0x06
-    SDeviceRegisterHandler(device, &__COMMAND_EMPTY); // 0x07
+    SDeviceRegisterHandler(device, &_BUILTIN_PANIC_CLEAR); // 0x07
     SDeviceRegisterHandler(device, &__COMMAND_EMPTY); // 0x08
     SDeviceRegisterHandler(device, &__COMMAND_EMPTY); // 0x09
     SDeviceRegisterHandler(device, &__COMMAND_EMPTY); // 0x0A
